@@ -1,0 +1,300 @@
+SELECT  T1.name  FROM Sailors AS T1  JOIN Reserves AS T2 ON T1.sid = T2.sid WHERE T2.bid = 103
+SELECT  T1.name  FROM Sailors AS T1  JOIN Reserves AS T2 ON T1.sid = T2.sid  JOIN Boats AS T3 ON T2.bid = T3.bid  WHERE T3.name = 'Melon'
+SELECT  AVG(T1.Units_sold_Millions)  FROM game AS T1  JOIN game_player AS T2 ON T1.Game_ID = T2.Game_ID  JOIN player AS T3 ON T2.Player_ID = T3.Player_ID  WHERE T3.Position = 'Guard'
+SELECT  T1.Collection_Name  FROM Collections AS T1  JOIN Collection_Subsets AS T2 ON T1.Collection_ID = T2.Related_Collection_ID  WHERE T2.Collection_Subset_Name = 'Best'
+SELECT Analytical_Layer_Type_Code FROM Analytical_Layer GROUP BY Analytical_Layer_Type_Code ORDER BY COUNT(*) DESC LIMIT 1
+SELECT  Nationality, COUNT(Customer_ID) FROM customer GROUP BY Nationality
+SELECT T1.customer_id, T1.customer_name, T1.customer_phone, T1.customer_email  FROM Customers AS T1  WHERE T1.customer_id = (     SELECT customer_id      FROM Customer_Orders      GROUP BY customer_id      ORDER BY COUNT(order_id) DESC      LIMIT 1 )
+SELECT  name  FROM staff  WHERE Age > (SELECT AVG(Age) FROM staff)
+SELECT  T1.invoice_id, T1.invoice_status, T1.invoice_details  FROM Invoices AS T1  JOIN Payments AS T2 ON T1.invoice_id = T2.invoice_id  GROUP BY T1.invoice_id, T1.invoice_status, T1.invoice_details  ORDER BY COUNT(T2.payment_id) DESC  LIMIT 1
+SELECT  product_name  FROM Products  WHERE product_price > (SELECT AVG(product_price) FROM Products)
+SELECT  SUM(T1.Weight)  FROM Package AS T1  JOIN Client AS T2 ON T1.Sender = T2.AccountNumber  WHERE T2.Name = 'Leo Wong'
+SELECT  pilot_name, age  FROM PilotSkills  JOIN Hangar ON PilotSkills.plane_name = Hangar.plane_name  WHERE (PilotSkills.plane_name = 'Piper Cub' AND age > 35)  OR (PilotSkills.plane_name = 'F-14 Fighter' AND age < 30)
+SELECT  client_id  FROM Invoices  GROUP BY client_id  HAVING COUNT(*) >= 2
+SELECT  DISTINCT T3.Collection_Subset_Name  FROM Document_Objects AS T1  JOIN Document_Subset_Members AS T2 ON T1.Document_Object_ID = T2.Document_Object_ID  JOIN Document_Subsets AS T3 ON T2.Document_Subset_ID = T3.Document_Subset_ID  WHERE T1.Owner = 'Braeden'
+SELECT  AVG(T1.distance)  FROM Direct_distance AS T1  JOIN City AS T2 ON T1.city2_code = T2.city_code JOIN City AS T3 ON T1.city1_code = T3.city_code WHERE T3.city_name = 'Boston'
+SELECT  count(DISTINCT T1.Title) FROM Movies AS T1 JOIN MovieTheaters AS T2 ON T1.Code = T2.Movie
+SELECT  T2.age_category_code  FROM Users AS T1  JOIN Ref_Age_Categories AS T2 ON T1.age_category_code = T2.age_category_code WHERE T1.other_user_details LIKE '%Mother%'
+SELECT  T1.ISBN, SUM(T2.amount)  FROM Book AS T1  JOIN Books_Order AS T2 ON T1.ISBN = T2.ISBN  GROUP BY T1.ISBN
+SELECT  pilot_name  FROM PilotSkills  WHERE plane_name IN (SELECT plane_name FROM Hangar WHERE location = 'Austin')  AND pilot_name IN (SELECT pilot_name FROM PilotSkills WHERE plane_name IN (SELECT plane_name FROM Hangar WHERE location = 'Boston'))
+SELECT  T1.Name, T1.Gender  FROM author AS T1  JOIN book AS T2 ON T1.Author_ID = T2.Author_ID  GROUP BY T1.Name, T1.Gender  ORDER BY COUNT(T2.Book_ID) DESC  LIMIT 1
+SELECT  count(DISTINCT T1.pilot_name) FROM PilotSkills AS T1 JOIN Hangar AS T2 ON T1.plane_name = T2.plane_name WHERE T2.location = 'Chicago' GROUP BY T1.pilot_name
+SELECT  Customer_Details  FROM Customers  WHERE Customer_ID = (     SELECT Customer_ID      FROM Customer_Interactions      GROUP BY Customer_ID      ORDER BY COUNT(*) DESC      LIMIT 1 )
+SELECT  T1.Id  FROM customers AS T1  JOIN receipts AS T2 ON T1.Id = T2.CustomerId  JOIN items AS T3 ON T2.ReceiptNumber = T3.Receipt  JOIN goods AS T4 ON T3.Item = T4.Id  GROUP BY T1.Id  HAVING AVG(T4.Price) > 5
+SELECT  product_name  FROM Products  LEFT JOIN Order_Items ON Products.product_id = Order_Items.product_id  WHERE Order_Items.product_id IS NULL
+SELECT  Document_Object_ID, COUNT(Related_Document_Object_ID) AS Number_of_Related_Documents FROM Document_Subset_Members GROUP BY Document_Object_ID HAVING COUNT(Related_Document_Object_ID) BETWEEN 2 AND 4
+SELECT  T1.detention_type_code, T2.detention_type_description  FROM Detention AS T1  JOIN Ref_Detention_Type AS T2 ON T1.detention_type_code = T2.detention_type_code  GROUP BY T1.detention_type_code, T2.detention_type_description  ORDER BY COUNT(*)  LIMIT 1
+SELECT  Student_Answer_Text, COUNT(*) AS count  FROM Student_Answers  GROUP BY Student_Answer_Text  ORDER BY count DESC
+SELECT  Collection_Name  FROM Collections  WHERE Collection_ID NOT IN (SELECT DISTINCT Parent_Collection_ID FROM Collections) 
+SELECT  T2.Name, T1.Dish_Name  FROM customer_order AS T1  JOIN customer AS T2 ON T1.Customer_ID = T2.Customer_ID
+SELECT  fname, lname  FROM Artists  WHERE artistID IN (SELECT painterID FROM Paintings) AND artistID NOT IN (SELECT sculptorID FROM Sculptures)
+SELECT  T1.Email_Address, T2.Date_of_Answer  FROM Students AS T1  JOIN Student_Answers AS T2 ON T1.Student_ID = T2.Student_ID  ORDER BY T2.Date_of_Answer DESC
+SELECT  T1.Transmitter, COUNT(T2.City_channel_ID)  FROM radio AS T1  JOIN city_channel_radio AS T2 ON T1.Radio_ID = T2.Radio_ID  GROUP BY T1.Transmitter
+SELECT  T1.location, COUNT(DISTINCT T2.pilot_name), AVG(T2.age)  FROM Hangar AS T1  JOIN PilotSkills AS T2 ON T1.plane_name = T2.plane_name  GROUP BY T1.location
+SELECT  T1.name , COUNT(T3.paper_id) AS paper_count  FROM Affiliation AS T1  JOIN Author_list AS T2 ON T1.affiliation_id = T2.affiliation_id  JOIN Paper AS T3 ON T2.paper_id = T3.paper_id  WHERE T3.year = 2009  GROUP BY T1.affiliation_id  ORDER BY paper_count DESC  LIMIT 3
+SELECT  T1.start_date_time, T1.end_date_time, T2.client_details, T4.staff_details  FROM Meetings AS T1  JOIN Clients AS T2 ON T1.client_id = T2.client_id  JOIN Staff_in_Meetings AS T3 ON T1.meeting_id = T3.meeting_id  JOIN Staff AS T4 ON T3.staff_id = T4.staff_id
+SELECT T1.First_Name, T2.Date_of_Answer  FROM Students AS T1  JOIN Student_Answers AS T2 ON T1.Student_ID = T2.Student_ID
+SELECT  count(DISTINCT T1.pilot_name) FROM PilotSkills AS T1 JOIN Hangar AS T2 ON T1.plane_name = T2.plane_name WHERE T2.location = 'Chicago' GROUP BY T1.pilot_name
+SELECT  T1.Title  FROM Book AS T1  JOIN Books_Order AS T2 ON T1.ISBN = T2.ISBN
+SELECT  T1.date_of_transcript  FROM Transcripts AS T1  JOIN Students AS T2 ON T1.student_id = T2.student_id  JOIN Student_Loans AS T3 ON T2.student_id = T3.student_id  WHERE T3.amount_of_loan = (SELECT MAX(amount_of_loan) FROM Student_Loans)
+SELECT  T1.agency_id  FROM Agencies AS T1  LEFT JOIN Clients AS T2 ON T1.agency_id = T2.agency_id  WHERE T2.agency_id IS NULL
+SELECT  Conference_Name, COUNT(*) FROM conference_participation  JOIN conference ON conference_participation.Conference_ID = conference.Conference_ID GROUP BY Conference_Name
+SELECT  DISTINCT Owner  FROM Document_Objects  WHERE Parent_Document_Object_ID IN      (SELECT Document_Object_ID       FROM Document_Objects       WHERE Owner = 'Braeden')
+SELECT  SUM(T2.Population) AS total_population, AVG(T2.Population) AS average_population  FROM spokesman_district AS T1  JOIN district AS T2 ON T1.District_ID = T2.District_ID GROUP BY T2.District_ID
+SELECT  pilot_name  FROM PilotSkills  WHERE plane_name = 'Piper Cub'  AND pilot_name NOT IN  (SELECT pilot_name  FROM PilotSkills  WHERE plane_name = 'B-52 Bomber') GROUP BY pilot_name
+SELECT  T1.Conference_Name  FROM conference AS T1  JOIN conference_participation AS T2 ON T1.Conference_ID = T2.Conference_ID  GROUP BY T1.Conference_ID, T1.Conference_Name  ORDER BY COUNT(T2.staff_ID) DESC  LIMIT 2
+SELECT  Contents, SUM(Value) AS total_value, COUNT(*) AS total_boxes FROM Boxes GROUP BY Contents
+SELECT  Package.PackageNumber, MAX(Package.Weight) as Weight FROM Package  JOIN Client ON Package.Recipient = Client.AccountNumber  WHERE Client.Name LIKE '%John%'  GROUP BY Package.PackageNumber ORDER BY Weight DESC
+SELECT  DISTINCT T1.stage_presence  FROM performance_score AS T1  JOIN songs AS T2 ON T1.songs_id = T2.id  WHERE T2.language = 'English'
+SELECT Students.First_Name, Student_Answers.Date_of_Answer  FROM Students  JOIN Student_Answers ON Students.Student_ID = Student_Answers.Student_ID
+SELECT  AVG(T1.age) ,  T2.plane_name FROM PilotSkills AS T1 JOIN Hangar AS T2 ON T1.plane_name  =  T2.plane_name GROUP BY T2.plane_name
+SELECT  Paintings.width_mm  FROM Paintings  JOIN Artists ON Paintings.painterID = Artists.artistID  WHERE Artists.birthYear < 1850
+SELECT  T1.Neighborhood  FROM store AS T1  WHERE T1.Store_ID NOT IN (SELECT T2.Store_ID FROM stock AS T2 WHERE T1.Store_ID = T2.Store_ID)
+SELECT  game.Title  FROM game  JOIN platform ON game.Platform_ID = platform.Platform_ID  WHERE platform.Market_district = 'Asia' OR platform.Market_district = 'USA'
+SELECT  bio_data, student_details  FROM Students  WHERE student_id IN (SELECT student_id FROM Student_Loans GROUP BY student_id HAVING amount_of_loan > (SELECT AVG(amount_of_loan) FROM Student_Loans))
+SELECT  Client.Name  FROM Client  LEFT JOIN Orders ON Client.IdClient = Orders.IdClient  WHERE Orders.IdOrder IS NULL
+SELECT  Make FROM team GROUP BY Make HAVING COUNT(DISTINCT Team_ID) > 1
+SELECT  location, SUM(capacity) AS total_capacity, AVG(capacity) AS average_capacity, MAX(capacity) AS max_capacity FROM Warehouses GROUP BY location
+SELECT  Player_name  FROM player  WHERE Player_ID NOT IN (SELECT Player_ID FROM game_player)
+SELECT  Meetings.meeting_id, Meetings.meeting_outcome, Meetings.meeting_type, Clients.client_details  FROM Meetings  JOIN Clients ON Meetings.client_id = Clients.client_id
+SELECT  T1.Type  FROM book AS T1  JOIN review AS T2 ON T1.Book_ID = T2.Book_ID  GROUP BY T1.Type  HAVING COUNT(T1.Book_ID) >= 3
+SELECT  DISTINCT T1.birthYear, T2.sculptorID  FROM Artists AS T1  JOIN Sculptures AS T2 ON T1.artistID = T2.sculptorID  WHERE T2.year > 1920 GROUP BY T1.birthYear, T2.sculptorID
+SELECT  Authors.author_name  FROM Authors  JOIN Documents ON Authors.author_name = Documents.author_name  GROUP BY Authors.author_name  HAVING COUNT(DISTINCT Documents.document_id) >= 2
+SELECT  T1.Earpads , COUNT(T2.Headphone_ID) AS num_headphones  FROM headphone AS T1  JOIN stock AS T2 ON T1.Headphone_ID = T2.Headphone_ID  GROUP BY T1.Earpads  ORDER BY num_headphones DESC  LIMIT 2
+SELECT  T1.fname , COUNT(T2.paintingID) AS num_paintings  FROM Artists AS T1  JOIN Paintings AS T2 ON T1.artistID = T2.painterID  GROUP BY T1.fname  HAVING COUNT(T2.paintingID) >= 2
+SELECT  Country FROM player GROUP BY Country HAVING COUNT(DISTINCT Player_ID) > 1
+SELECT Analytical_Layer_Type_Code FROM Analytical_Layer GROUP BY Analytical_Layer_Type_Code ORDER BY COUNT(*) DESC LIMIT 1
+SELECT  T1.name  FROM staff AS T1  JOIN conference_participation AS T2 ON T1.staff_ID = T2.staff_ID  WHERE T2.role IN ("speaker","sponsor")  GROUP BY T1.name  HAVING COUNT(DISTINCT T2.role) = 2
+SELECT  Construction, AVG(Price) AS Average_Price FROM headphone GROUP BY Construction
+SELECT  Manufacturer FROM club GROUP BY Manufacturer ORDER BY COUNT(*) DESC LIMIT 1
+SELECT  T1.state  FROM City AS T1  JOIN Student AS T2 ON T1.city_code = T2.city_code  WHERE T2.Fname = 'Linda'
+SELECT  T1.Name  FROM driver AS T1  JOIN vehicle_driver AS T2 ON T1.Driver_ID = T2.Driver_ID  JOIN vehicle AS T3 ON T2.Vehicle_ID = T3.Vehicle_ID  WHERE T3.Power > 5000
+SELECT  count(DISTINCT T1.Driver_ID)  FROM driver AS T1  JOIN vehicle_driver AS T2 ON T1.Driver_ID = T2.Driver_ID  JOIN vehicle AS T3 ON T2.Vehicle_ID = T3.Vehicle_ID  WHERE T3.Build_Year = 2012
+SELECT  DISTINCT T1.birthYear  FROM Artists AS T1  JOIN Sculptures AS T2 ON T1.artistID = T2.sculptorID  WHERE T2.year > 1920 GROUP BY T1.birthYear
+SELECT  T1.Warehouse  FROM Boxes AS T1  JOIN Warehouses AS T2 ON T1.Warehouse = T2.Code  GROUP BY T1.Warehouse  HAVING COUNT(T1.Code) > T2.Capacity
+SELECT  COUNT(DISTINCT al.author_id)  FROM Author_list al JOIN Author a ON al.author_id = a.author_id WHERE a.name = 'Mckeown, Kathleen'
+SELECT  Boxes.Code  FROM Boxes  JOIN Warehouses ON Boxes.Warehouse = Warehouses.Code  WHERE Warehouses.Location = 'Chicago' OR Warehouses.Location = 'New York'
+SELECT T1.datestamp, T2.property_name  FROM User_Property_History AS T1  JOIN Properties AS T2 ON T1.property_id = T2.property_id  ORDER BY T1.datestamp
+SELECT  DISTINCT Package.PackageNumber  FROM Package  JOIN Client ON Package.Recipient = Client.AccountNumber  WHERE Client.Name = 'Leo Wong'
+SELECT  T1.name , SUM(T2.total_hours) AS total_rental_hours FROM Vehicles AS T1 JOIN Renting_history AS T2 ON T1.id = T2.vehicles_id GROUP BY T1.name
+SELECT  Invoices.invoice_id, COUNT(Payments.payment_id)  FROM Invoices  LEFT JOIN Payments ON Invoices.invoice_id = Payments.invoice_id  GROUP BY Invoices.invoice_id
+SELECT  Artists.fname, Artists.lname  FROM Artists  WHERE artistID IN (SELECT painterID FROM Paintings)  AND artistID IN (SELECT sculptorID FROM Sculptures)
+SELECT  COUNT(DISTINCT product_id) FROM Products WHERE product_id NOT IN (SELECT DISTINCT product_id FROM Order_Items)
+SELECT  pilot_name  FROM PilotSkills  WHERE age < (SELECT AVG(age) FROM PilotSkills)  GROUP BY pilot_name  ORDER BY age ASC
+SELECT  Services.Service_Details  FROM Services  JOIN Customers_and_Services ON Services.Service_ID = Customers_and_Services.Service_ID  JOIN Customers ON Customers_and_Services.Customer_ID = Customers.Customer_ID  WHERE Customers.Customer_Details = "Hardy Kutch"
+SELECT  product_price, product_size  FROM Products  WHERE product_price > (SELECT AVG(product_price) FROM Products)
+SELECT  T1.Rank  FROM review AS T1  JOIN book AS T2 ON T1.Book_ID = T2.Book_ID  WHERE T2.Pages = (SELECT MIN(Pages) FROM book) GROUP BY T1.Rank
+SELECT  T1.Name  FROM club AS T1  LEFT JOIN player AS T2 ON T1.Club_ID = T2.Club_ID  WHERE T2.Club_ID IS NULL
+SELECT  Model  FROM headphone  WHERE Headphone_ID NOT IN (SELECT Headphone_ID FROM stock)
+SELECT  T1.Name, T1.Internet  FROM channel AS T1  JOIN director_admin AS T2 ON T1.Channel_ID = T2.Channel_ID  GROUP BY T1.Channel_ID  ORDER BY COUNT(T2.Director_ID) DESC  LIMIT 1
+SELECT  distance  FROM Direct_distance  WHERE city1_code = (SELECT city_code FROM City WHERE city_name = 'Boston')  AND city2_code = (SELECT city_code FROM City WHERE city_name = 'Newark')
+SELECT  T1.name  FROM Vehicles AS T1  JOIN Renting_history AS T2 ON T1.id = T2.vehicles_id  ORDER BY T2.total_hours DESC
+SELECT  T1.sid, T1.name  FROM Sailors AS T1  JOIN Reserves AS T2 ON T1.sid = T2.sid  GROUP BY T1.sid, T1.name  HAVING COUNT(DISTINCT T2.bid) > 1
+SELECT Completed_Year FROM building GROUP BY Completed_Year ORDER BY COUNT(*) DESC LIMIT 1
+SELECT  T1.Name, T1.Gender  FROM author AS T1  JOIN book AS T2 ON T1.Author_ID = T2.Author_ID  GROUP BY T1.Name, T1.Gender  ORDER BY COUNT(T2.Book_ID) DESC  LIMIT 1
+SELECT  Agencies.agency_id, Agencies.agency_details  FROM Agencies  JOIN Clients ON Agencies.agency_id = Clients.agency_id  GROUP BY Agencies.agency_id, Agencies.agency_details  HAVING COUNT(DISTINCT Clients.client_id) >= 2
+SELECT  T1.Name, T2.Nickname  FROM institution AS T1  JOIN Championship AS T2 ON T1.Institution_ID = T2.Institution_ID
+SELECT  product_color, product_description, product_size  FROM Products  WHERE product_price < (SELECT MAX(product_price) FROM Products)
+SELECT  count(DISTINCT T1.property_id)  FROM Properties AS T1  JOIN Property_Features AS T2 ON T1.property_id = T2.property_id  GROUP BY T1.property_id  HAVING count(T2.feature_id) >= 2
+SELECT  Make, AVG(Age) AS Average_Age FROM driver GROUP BY Make
+SELECT  Food, AVG(Price) AS AveragePrice, MIN(Price) AS MinPrice, MAX(Price) AS MaxPrice FROM goods GROUP BY Food
+SELECT  Food, MIN(Price) AS LowestPrice, MAX(Price) AS HighestPrice FROM goods GROUP BY Food ORDER BY Food
+SELECT  T1.paper_id, T1.title  FROM Paper AS T1  JOIN Author_list AS T2 ON T1.paper_id = T2.paper_id  JOIN Author AS T3 ON T2.author_id = T3.author_id  WHERE T3.name IN ('Mckeown, Kathleen', 'Rambow, Owen') GROUP BY T1.paper_id, T1.title
+SELECT T1.address_type_code, T1.address_type_description  FROM Ref_Address_Types AS T1  WHERE T1.address_type_code = (     SELECT address_type_code      FROM Students_Addresses      GROUP BY address_type_code      ORDER BY COUNT(*) DESC      LIMIT 1 )
+SELECT T1.order_id , COUNT(T2.product_id) , T1.order_status_code  FROM Orders AS T1  JOIN Order_Items AS T2 ON T1.order_id = T2.order_id  GROUP BY T1.order_id, T1.order_status_code
+SELECT  Products.product_id, Products.product_name, Products.product_price, Products.product_color  FROM Products  LEFT JOIN Order_Items ON Products.product_id = Order_Items.product_id  GROUP BY Products.product_id, Products.product_name, Products.product_price, Products.product_color  HAVING COUNT(DISTINCT Order_Items.order_id) < 2
+SELECT  count(DISTINCT T2.Code) FROM Boxes AS T1 JOIN Warehouses AS T2 ON T1.Warehouse = T2.Code WHERE T1.Contents = 'Rocks'
+SELECT  T1.fname, COUNT(T2.paintingID)  FROM Artists AS T1  JOIN Paintings AS T2 ON T1.artistID = T2.painterID  GROUP BY T1.fname  HAVING COUNT(T2.paintingID) >= 2
+SELECT  T2.Major_Name, T1.Rank  FROM major_ranking AS T1  JOIN major AS T2 ON T1.Major_ID = T2.Major_ID  JOIN university AS T3 ON T1.University_ID = T3.University_ID  WHERE T3.University_Name = "Augustana College"
+SELECT  T1.Name FROM club AS T1 LEFT JOIN player AS T2 ON T1.Club_ID = T2.Club_ID WHERE T2.Club_ID IS NULL
+SELECT  state, COUNT(city_code) FROM City GROUP BY state
+SELECT  count(*) FROM Package  JOIN Client AS sender ON Package.Sender = sender.AccountNumber  JOIN Client AS recipient ON Package.Recipient = recipient.AccountNumber  WHERE sender.Name = 'Ogden Wernstrom' AND recipient.Name = 'Leo Wong'
+SELECT  T1.Name  FROM region AS T1  LEFT JOIN building AS T2 ON T1.Region_ID = T2.Region_ID  WHERE T2.Region_ID IS NULL
+SELECT  Book.Title  FROM Book  JOIN Books_Order ON Book.ISBN = Books_Order.ISBN  JOIN Orders ON Books_Order.IdOrder = Orders.IdOrder  JOIN Client ON Orders.IdClient = Client.IdClient WHERE Client.Name = 'Peter Doe'  AND Book.Title NOT IN  (SELECT Book.Title  FROM Book  JOIN Books_Order ON Book.ISBN = Books_Order.ISBN  JOIN Orders ON Books_Order.IdOrder = Orders.IdOrder  JOIN Client ON Orders.IdClient = Client.IdClient WHERE Client.Name = 'James Smith')
+SELECT  Earpads FROM headphone WHERE Construction != "plastic"
+SELECT  T1.Capital  FROM country AS T1  JOIN driver AS T2 ON T1.Country = T2.Country  WHERE T2.Points = (SELECT MAX(Points) FROM driver) ORDER BY T2.Points DESC LIMIT 1
+SELECT  T1.author_id, COUNT(T1.paper_id) AS paper_count  FROM Author_list AS T1  JOIN Author AS T2 ON T1.author_id = T2.author_id  WHERE T2.name = 'Mckeown , Kathleen'  GROUP BY T1.author_id  ORDER BY paper_count DESC  LIMIT 1
+SELECT  T1.Name  FROM Planet AS T1  JOIN Shipment AS T2 ON T1.PlanetID = T2.Planet  JOIN Package AS T3 ON T2.ShipmentID = T3.Shipment  GROUP BY T1.Name  HAVING SUM(T3.Weight) > 30
+SELECT  T1.city_name  FROM City AS T1  JOIN Direct_distance AS T2 ON T1.city_code = T2.city2_code  WHERE T2.city1_code = 'Boston'  ORDER BY T2.distance DESC  LIMIT 1
+SELECT  T1.feature_name, T1.feature_description  FROM Features AS T1  WHERE T1.feature_id = (     SELECT feature_id      FROM Property_Features      GROUP BY feature_id      ORDER BY COUNT(*) DESC      LIMIT 1 )
+SELECT  DISTINCT T1.Title, T2.Name  FROM Movies AS T1  JOIN MovieTheaters AS T2 ON T1.Code = T2.Movie
+SELECT  product_id, product_description  FROM Products  JOIN Order_Items ON Products.product_id = Order_Items.product_id  GROUP BY product_id, product_description  HAVING COUNT(*) > 3
+SELECT  process_name  FROM Business_Processes  WHERE process_id = (SELECT next_process_id FROM Business_Processes WHERE process_id = 9)
+SELECT  State FROM university WHERE Enrollment < 3000 GROUP BY State HAVING COUNT(University_ID) > 2
+SELECT  Package.PackageNumber  FROM Package  JOIN Client ON Package.Recipient = Client.AccountNumber OR Package.Sender = Client.AccountNumber  WHERE Client.Name = 'Leo Wong'
+SELECT  T1.Document_Object_ID  FROM Documents_in_Collections AS T1  JOIN Collections AS C ON T1.Collection_ID = C.Collection_ID LEFT JOIN Document_Subsets AS T2 ON T1.Document_Subset_ID = T2.Document_Subset_ID  WHERE C.Collection_Name = 'Best' AND T2.Document_Subset_Name IS NULL
+SELECT  customer_first_name, product_name  FROM Customers  JOIN Orders ON Customers.customer_id = Orders.customer_id  JOIN Order_Items ON Orders.order_id = Order_Items.order_id  JOIN Products ON Order_Items.product_id = Products.product_id
+SELECT  T1.pilot_name, T2.plane_name, MAX(T1.age) as oldest_age FROM PilotSkills AS T1 JOIN Hangar AS T2 ON T1.plane_name = T2.plane_name GROUP BY T2.plane_name
+SELECT  T1.name, COUNT(T3.paper_id) AS paper_count  FROM Affiliation AS T1  JOIN Author_list AS T2 ON T1.affiliation_id = T2.affiliation_id  JOIN Paper AS T3 ON T2.paper_id = T3.paper_id  GROUP BY T1.name  ORDER BY paper_count DESC
+SELECT  COUNT(DISTINCT T1.Contents) AS Num_of_Contents, T2.Location  FROM Boxes AS T1  JOIN Warehouses AS T2 ON T1.Warehouse = T2.Code  GROUP BY T2.Location
+SELECT  m.Nationality  FROM member m WHERE m.Age > 22  INTERSECT  SELECT m.Nationality  FROM member m WHERE m.Age < 19
+SELECT  university.University_Name  FROM university  JOIN major_ranking ON university.University_ID = major_ranking.University_ID  JOIN major ON major_ranking.Major_ID = major.Major_ID  WHERE major.Major_Name = 'Accounting' OR major.Major_Name = 'Urban Education' GROUP BY university.University_Name HAVING COUNT(DISTINCT major.Major_Name) = 2
+SELECT  S.bio_data FROM Students AS S JOIN Behaviour_Monitoring AS BM ON S.student_id = BM.student_id WHERE BM.behaviour_monitoring_details = (SELECT behaviour_monitoring_details                                          FROM Behaviour_Monitoring                                          GROUP BY behaviour_monitoring_details                                          ORDER BY COUNT(*) DESC                                          LIMIT 1) GROUP BY S.student_id HAVING COUNT(*) = 1
+SELECT  Book.Title  FROM Book  JOIN Books_Order ON Book.ISBN = Books_Order.ISBN  JOIN Orders ON Books_Order.IdOrder = Orders.IdOrder  JOIN Client ON Orders.IdClient = Client.IdClient  WHERE Client.Name = 'Peter Doe'  AND Book.Title NOT IN  (SELECT Book.Title  FROM Book  JOIN Books_Order ON Book.ISBN = Books_Order.ISBN  JOIN Orders ON Books_Order.IdOrder = Orders.IdOrder  JOIN Client ON Orders.IdClient = Client.IdClient  WHERE Client.Name = 'James Smith')
+SELECT meeting_outcome, COUNT(meeting_id) FROM Meetings GROUP BY meeting_outcome
+SELECT  Name  FROM Employee  WHERE Salary > (SELECT AVG(Salary) FROM Employee) OR Salary > 5000
+SELECT  game.Title  FROM game  JOIN platform ON game.Platform_ID = platform.Platform_ID  WHERE platform.Market_district = "Asia" OR platform.Market_district = "USA"
+SELECT  institution.Institution_Name, institution.Location  FROM institution  WHERE institution.Institution_ID NOT IN  (SELECT staff.Institution_ID  FROM staff  WHERE staff.staff_ID NOT IN  (SELECT conference_participation.staff_ID  FROM conference_participation  JOIN conference ON conference_participation.Conference_ID = conference.Conference_ID  WHERE conference.Year = 2004))
+SELECT  property_type_description, property_type_code  FROM Ref_Property_Types  GROUP BY property_type_description, property_type_code  ORDER BY COUNT(property_type_code) DESC  LIMIT 1
+SELECT  driver.Constructor  FROM driver  WHERE driver.Age < 20  INTERSECT  SELECT driver.Constructor  FROM driver  WHERE driver.Age > 30
+SELECT  Student.StuID  FROM Student  JOIN City ON Student.city_code = City.city_code  WHERE Student.Sex = 'F' AND City.state = 'PA'
+SELECT  Sailors.sid, Sailors.name  FROM Sailors  JOIN Reserves ON Sailors.sid = Reserves.sid  JOIN Boats ON Reserves.bid = Boats.bid  WHERE Boats.color = 'red' OR Boats.color = 'blue'
+SELECT  count(*)  FROM Citation  JOIN Paper ON Citation.cited_paper_id = Paper.paper_id  JOIN Author_list ON Paper.paper_id = Author_list.paper_id  JOIN Author ON Author_list.author_id = Author.author_id  WHERE Author.name = 'Mckeown, Kathleen'
+SELECT  T1.name, COUNT(T3.cited_paper_id) as num_citations  FROM Author AS T1  JOIN Author_list AS T2 ON T1.author_id = T2.author_id  JOIN Citation AS T3 ON T2.paper_id = T3.paper_id  GROUP BY T1.author_id  ORDER BY num_citations DESC  LIMIT 1
+SELECT  Services.Service_Details  FROM Customers_and_Services  JOIN Services ON Customers_and_Services.Service_ID = Services.Service_ID  WHERE Customers_and_Services.Customers_and_Services_Details = "unsatisfied"
+SELECT  T1.bio_data, T3.address_details  FROM Students AS T1  JOIN Students_Addresses AS T2 ON T1.student_id = T2.student_id  JOIN Addresses AS T3 ON T2.address_id = T3.address_id
+SELECT  Nationality FROM customer GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1
+SELECT  T1.Name, SUM(T2.Quantity) AS total_stock  FROM store AS T1  JOIN stock AS T2 ON T1.Store_ID = T2.Store_ID  GROUP BY T1.Name  ORDER BY total_stock DESC  LIMIT 1
+SELECT  Year FROM conference GROUP BY Year ORDER BY COUNT(*) ASC LIMIT 1
+SELECT  T1.client_id, T1.sic_code, T1.agency_id FROM Clients AS T1 JOIN Meetings AS T2 ON T1.client_id = T2.client_id JOIN Invoices AS T3 ON T1.client_id = T3.client_id GROUP BY T1.client_id, T1.sic_code, T1.agency_id HAVING COUNT(DISTINCT T2.meeting_id) = 1
+SELECT  Shipment.ShipmentID  FROM Shipment  JOIN Employee ON Shipment.Manager = Employee.EmployeeID  WHERE Employee.Name = 'Phillip J. Fry'
+SELECT  AVG(Value) AS average_value, SUM(Value) AS total_value FROM Boxes
+SELECT  MAX(Rank_of_the_year) AS max_rank, MIN(Rank_of_the_year) AS min_rank FROM player
+SELECT  COUNT(Customer_ID) FROM customer
+SELECT  Model  FROM vehicle  WHERE Power > 6000  ORDER BY Top_Speed DESC  LIMIT 1
+SELECT  COUNT(sid)  FROM Sailors  WHERE name LIKE 'D%'
+SELECT  name  FROM countries  ORDER BY education_score DESC
+SELECT  COUNT(DISTINCT Customers_and_Services.Customers_and_Services_Details) FROM Customers_and_Services
+SELECT  COUNT(DISTINCT room_size) FROM Rooms
+SELECT  MIN(date_of_loan) FROM Student_Loans
+SELECT  City, Station_name  FROM city_channel  ORDER BY Station_name ASC
+SELECT  client_id, client_details  FROM Clients  WHERE sic_code = "Bad"
+SELECT  Users.login_name  FROM Users  WHERE Users.age_category_code = 'senior citizen'  ORDER BY Users.first_name
+SELECT  Name FROM club ORDER BY Name ASC
+SELECT  Name, Nationality FROM member
+SELECT  author_name  FROM Documents  WHERE document_id = 4
+SELECT  MAX(Age) AS max_age, MIN(Age) AS min_age FROM driver
+SELECT  DISTINCT state FROM City
+SELECT bio_data FROM Students WHERE student_details LIKE '%Suite%'
+SELECT  Name FROM institution ORDER BY Founded ASC
+SELECT  DISTINCT state FROM City
+SELECT  goods.Id  FROM goods  WHERE Food IN ('Cookie', 'Cake')  AND Price BETWEEN 3 AND 7
+SELECT  COUNT(address_id) FROM Addresses
+SELECT  COUNT(ISBN) FROM Book
+SELECT Document_Subset_ID, Document_Subset_Name  FROM Document_Subsets
+SELECT  COUNT(*) FROM Document_Objects WHERE Owner = 'Marlin'
+SELECT  Title FROM book ORDER BY Title ASC
+SELECT  D1.distance  FROM Direct_distance AS D1  JOIN City AS C1 ON D1.city1_code = C1.city_code  JOIN City AS C2 ON D1.city2_code = C2.city_code  WHERE C1.city_name = 'BAL' AND C2.city_name = 'CHI'
+SELECT  Title, Developers  FROM game  ORDER BY Units_sold_Millions DESC
+SELECT  DISTINCT Rating FROM Movies
+SELECT  PackageNumber, Weight  FROM Package  WHERE Weight BETWEEN 10 AND 30
+SELECT  COUNT(*) FROM Boats WHERE color = 'red'
+SELECT  year, location, title  FROM Paintings  WHERE height_mm > 1000  ORDER BY title
+SELECT  AVG(amount_of_loan) FROM Student_Loans
+SELECT  University_Name, City, State  FROM university  ORDER BY University_Name ASC
+SELECT Contents  FROM Boxes  ORDER BY Value DESC  LIMIT 1
+SELECT  Name  FROM region  GROUP BY Name  ORDER BY Area DESC  LIMIT 5
+SELECT  T1.city_code  FROM City AS T1  JOIN Direct_distance AS T2 ON T1.city_code = T2.city2_code  WHERE T2.distance < 1000
+SELECT  Top_Speed, Power  FROM vehicle  WHERE Build_Year = 1996
+SELECT  AVG(height_mm), AVG(width_mm) FROM Paintings WHERE medium = 'oil' AND location = 241 GROUP BY medium
+SELECT  AVG(justice_score) FROM countries
+SELECT  AVG(Salary) FROM Employee WHERE Position = 'Intern'
+SELECT  bid  FROM Reserves  WHERE sid = 1
+SELECT  District_ID, Name, Government_website FROM district ORDER BY Population DESC
+SELECT  T1.plane_name  FROM Hangar AS T1  JOIN PilotSkills AS T2 ON T1.plane_name = T2.plane_name  WHERE T2.pilot_name = 'Jones' AND T2.age = 32
+SELECT  Name FROM region ORDER BY Name ASC
+SELECT  paintingID  FROM Paintings  WHERE height_mm > 500 AND height_mm < 2000
+SELECT count(*) FROM Citation WHERE cited_paper_id = 'D12-1027'
+SELECT  COUNT(DISTINCT invoice_id) FROM Invoices
+SELECT  Exam_Date  FROM Exams  WHERE Subject_Code LIKE '%data%'  ORDER BY Exam_Date DESC
+SELECT  COUNT(DISTINCT T1.customer_id) AS total_customers FROM Customers AS T1 JOIN Orders AS T2 ON T1.customer_id = T2.customer_id
+SELECT  Exam_Date, Exam_Name  FROM Exams  WHERE Subject_Code != "Database"
+SELECT  Id, Price FROM goods WHERE Id = 70
+SELECT  DISTINCT Conference_Name FROM conference
+SELECT  COUNT(*) FROM race
+SELECT  name  FROM countries  ORDER BY overall_score DESC
+SELECT  Stadium  FROM institution  ORDER BY Capacity DESC
+SELECT  DISTINCT location  FROM Paintings  WHERE year < 1885  AND location NOT IN (SELECT location FROM Paintings WHERE mediumOn = 'canvas')
+SELECT  Name  FROM customer  ORDER BY Level_of_Membership ASC
+SELECT  pilot_name  FROM PilotSkills  ORDER BY age DESC  LIMIT 1
+SELECT  COUNT(DISTINCT University_ID) FROM university WHERE State = 'Illinois' OR State = 'Ohio'
+SELECT  title  FROM Sculptures  WHERE year = (SELECT MAX(year) FROM Sculptures)
+SELECT  Name, Address FROM Client
+SELECT  AVG(Card_Credit)  FROM customer  WHERE Level_of_Membership > 1
+SELECT  Title  FROM Book  WHERE SalePrice = (SELECT MIN(SalePrice) FROM Book)
+SELECT  COUNT(DISTINCT country) FROM City
+SELECT  Name  FROM driver  WHERE Citizenship = 'United States'
+SELECT  Transmitter  FROM radio  WHERE ERP > 150 OR ERP < 30
+SELECT  Driver_Name  FROM driver  ORDER BY Driver_Name DESC
+SELECT  Driver_Name  FROM driver  WHERE Constructor != 'Bugatti'
+SELECT  COUNT(author_id) FROM Author
+SELECT  DISTINCT Entrant FROM driver WHERE Age >= 20
+SELECT  city1_code FROM Direct_distance WHERE distance = (SELECT MAX(distance) FROM Direct_distance)
+SELECT  COUNT(DISTINCT customer_id) FROM Customers
+SELECT count(*) FROM Citation WHERE cited_paper_id = 'A00-1002'
+SELECT  address_id, address_details  FROM Addresses
+SELECT  location FROM Hangar ORDER BY plane_name
+SELECT  MAX(Rank_of_the_year) AS max_rank, MIN(Rank_of_the_year) AS min_rank FROM player
+SELECT  fname, lname  FROM Artists  WHERE birthYear > 1850
+SELECT  DISTINCT Collection_Subset_Name FROM Collection_Subsets
+SELECT  COUNT(DISTINCT bid) FROM Boats WHERE color = 'red'
+SELECT  achievement_type_code, achievement_details, date_achievement  FROM Achievements
+SELECT  COUNT(DISTINCT payment_method_code)  FROM Customer_Payment_Methods
+SELECT  COUNT(DISTINCT Country) FROM player
+SELECT  MAX(SalePrice) AS MaxSalePrice, MIN(SalePrice) AS MinSalePrice FROM Book
+SELECT  MAX(height_mm), paintingID  FROM Paintings  WHERE year < 1900 GROUP BY paintingID
+SELECT  COUNT(process_status_code)  FROM Process_Status
+SELECT  product_name  FROM Products  WHERE product_type_code = 'Clothes'  ORDER BY product_price DESC  LIMIT 1
+SELECT  pilot_name FROM PilotSkills WHERE age BETWEEN 30 AND 40 ORDER BY age ASC
+SELECT  pilot_name  FROM PilotSkills  WHERE plane_name = 'Piper Cub'  GROUP BY pilot_name  ORDER BY age ASC  LIMIT 1
+SELECT  MAX(Number_of_Stories)  FROM Building  WHERE Completed_Year != 1980
+SELECT  name FROM songs ORDER BY name ASC
+SELECT  author_name, other_details  FROM Authors
+SELECT  fname, MAX(deathYear - birthYear) AS age  FROM Artists GROUP BY fname ORDER BY age DESC LIMIT 1
+SELECT  Transmitter  FROM radio  WHERE ERP_kW = (SELECT MAX(ERP_kW) FROM radio)
+SELECT  book.Title, MAX(book.Chapters) AS Max_Chapters, MIN(book.Chapters) AS Min_Chapters FROM book GROUP BY book.Title
+SELECT  name, age  FROM Customers  WHERE membership_credit = (SELECT MAX(membership_credit) FROM Customers)
+SELECT  date_registered FROM Users WHERE login_name = 'ratione'
+SELECT  COUNT(paper_id)  FROM Paper  WHERE venue = 'NAACL 2000'  AND year = 2000
+SELECT  COUNT(*) FROM Paintings WHERE location = '240'
+SELECT  COUNT(DISTINCT Engine)  FROM driver  WHERE Age > 30 OR Age < 20
+SELECT  COUNT(DISTINCT Country) FROM player
+SELECT  COUNT(process_id) FROM Business_Processes
+SELECT  Contents FROM Boxes GROUP BY Contents ORDER BY sum(Value) DESC LIMIT 1
+SELECT  MAX(weight) AS max_weight, MIN(weight) AS min_weight FROM bike
+SELECT  product_id, product_type_code, product_name FROM Products
+SELECT  COUNT(DISTINCT Institution_ID) FROM institution WHERE Founded BETWEEN 1850 AND 1900
+SELECT  COUNT(DISTINCT Service_ID) FROM Services
+SELECT  Player_name  FROM player  ORDER BY Player_name ASC
+SELECT  Name  FROM district  WHERE Government_website LIKE '%.gov'
+SELECT  T1.Owner  FROM Document_Objects AS T1  JOIN Documents_in_Collections AS T2 ON T1.Document_Object_ID = T2.Document_Object_ID  JOIN Collections AS T3 ON T2.Collection_ID = T3.Collection_ID  WHERE T3.Collection_Name = 'Braeden Collection'
+SELECT title  FROM Paintings  WHERE width_mm < 600 OR height_mm > 800
+SELECT  T1.title  FROM Paintings AS T1  JOIN Artists AS T2 ON T1.painterID = T2.artistID  WHERE T1.medium = 'oil' AND T1.year > 1910
+SELECT  COUNT(*) FROM Properties WHERE (parking_lots = 1 OR garage_yn = 1)
+SELECT  Coordinates FROM Planet WHERE Name = "Mars"
+SELECT  Exam_Name, Exam_Date  FROM Exams  WHERE Subject_Code != "Database"
+SELECT  T1.bid  FROM Boats AS T1  JOIN Reserves AS T2 ON T1.bid = T2.bid
+SELECT  COUNT(DISTINCT Comments) FROM Student_Answers
+SELECT  AVG(distance) AS average_distance, MIN(distance) AS min_distance, MAX(distance) AS max_distance FROM Direct_distance
+SELECT  DISTINCT meeting_type, other_details FROM Meetings
+SELECT  Model, Class, Construction  FROM headphone  WHERE Price = (SELECT MIN(Price) FROM headphone)
+SELECT  COUNT(DISTINCT T1.student_id)  FROM Students AS T1  JOIN Detention AS T2 ON T1.student_id = T2.student_id
+SELECT  DISTINCT title FROM Paintings ORDER BY title ASC
+SELECT  COUNT(Player_ID) FROM player WHERE Rank_of_the_year <= 3
+SELECT  COUNT(IdClient) FROM Client
+SELECT Name  FROM region  GROUP BY Name  ORDER BY Area DESC  LIMIT 5
+SELECT  T1.Name  FROM MovieTheaters AS T1  JOIN Movies AS T2 ON T1.Movie = T2.Code  WHERE T2.Rating = 'G' OR T2.Rating = 'PG' GROUP BY T1.Name
+SELECT  AVG(Value) FROM Boxes
+SELECT  agency_id, agency_details  FROM Agencies
+SELECT  Sailors.name, Sailors.age  FROM Sailors  ORDER BY Sailors.rating DESC
+SELECT  product_name, weight FROM bike ORDER BY price
+SELECT  COUNT(DISTINCT paper_id) FROM Paper
+SELECT  Title  FROM Book  WHERE SalePrice = (SELECT MIN(SalePrice) FROM Book)
+SELECT Customer_ID, Customer_Details  FROM Customers  WHERE Customer_Details LIKE '%Kutch%'
+SELECT  DISTINCT payment_method_code FROM Customers
+SELECT  COUNT(staff_id) FROM Staff
+SELECT  COUNT(DISTINCT pilot_name) FROM PilotSkills WHERE age > 40
+SELECT  Flavor  FROM goods  WHERE Price > 10  AND Food = 'cake'
+SELECT  city_name  FROM City  WHERE state = 'PA'
+SELECT  count(DISTINCT participant_id) FROM performance_score WHERE stage_presence < 7 OR stage_presence > 9
+SELECT  DISTINCT title FROM Paintings ORDER BY width_mm DESC
+SELECT  fname, (MAX(deathYear) - birthYear) AS age  FROM Artists  ORDER BY age DESC  LIMIT 1
+SELECT  customer_address, customer_phone, customer_email FROM Customers WHERE customer_name = 'Jeromy'
+SELECT  paintingID, height_mm  FROM Paintings  WHERE width_mm = (SELECT MAX(width_mm) FROM Paintings WHERE location = 240) AND location = 240 GROUP BY paintingID, height_mm
+SELECT  COUNT(DISTINCT Contents) FROM Boxes
+SELECT  COUNT(*) FROM author WHERE Age < 30
+SELECT  AVG(product_price) FROM Products
+SELECT  player.Name  FROM player  ORDER BY Wins_count ASC
+SELECT  address_id, address_details FROM Addresses
+SELECT  DISTINCT location FROM Paintings WHERE year < 1885 OR year > 1930
+SELECT  Name, Address FROM Client ORDER BY Name ASC
